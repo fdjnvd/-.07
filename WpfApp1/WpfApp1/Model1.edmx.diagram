@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4759ea42c922485b9e29219c41d97d1c" Name="Diagram1">
+        <EntityTypeShape EntityType="ip50Model.Автобус" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ip50Model.Билет" Width="1.5" PointX="5.25" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ip50Model.Водители" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ip50Model.Диспетчер" Width="1.5" PointX="0.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ip50Model.Маршрут" Width="1.5" PointX="0.75" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ip50Model.Пассажир" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ip50Model.Пассажировместимость" Width="1.5" PointX="7.5" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="ip50Model.Расписание_рейсов" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="ip50Model.FK_Расписание_рейсов_Автобус" ManuallyRouted="false" />
+        <AssociationConnector Association="ip50Model.FK_Билет_Пассажир" ManuallyRouted="false" />
+        <AssociationConnector Association="ip50Model.FK_Билет_Расписание_рейсов" ManuallyRouted="false" />
+        <AssociationConnector Association="ip50Model.FK_Пассажировместимость_Билет" ManuallyRouted="false" />
+        <AssociationConnector Association="ip50Model.FK_Расписание_рейсов_Водители" ManuallyRouted="false" />
+        <AssociationConnector Association="ip50Model.FK_Расписание_рейсов_Диспетчер" ManuallyRouted="false" />
+        <AssociationConnector Association="ip50Model.FK_Расписание_рейсов_Маршрут" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

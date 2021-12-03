@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ip50Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Автобус">
+          <Key>
+            <PropertyRef Name="ID автобуса" />
+          </Key>
+          <Property Name="ID автобуса" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID водителя" Type="int" />
+          <Property Name="Модель автобуса" Type="nvarchar(max)" />
+          <Property Name="Пассажировместимость" Type="int" />
+          <Property Name="Дата проверки ТО" Type="date" />
+        </EntityType>
+        <EntityType Name="Билет">
+          <Key>
+            <PropertyRef Name="ID билета" />
+          </Key>
+          <Property Name="ID билета" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID пассажира" Type="int" />
+          <Property Name="ID рейса" Type="int" />
+        </EntityType>
+        <EntityType Name="Водители">
+          <Key>
+            <PropertyRef Name="ID водителя" />
+          </Key>
+          <Property Name="ID водителя" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar(max)" />
+          <Property Name="Имя" Type="nvarchar(max)" />
+          <Property Name="Отчество" Type="nvarchar(max)" />
+          <Property Name="Телефон" Type="int" />
+          <Property Name="Водительское удостоверение" Type="nchar" MaxLength="10" />
+          <Property Name="Паспортные данные" Type="int" />
+          <Property Name="ID рейса" Type="int" />
+          <Property Name="ID автобуса" Type="int" />
+        </EntityType>
+        <EntityType Name="Диспетчер">
+          <Key>
+            <PropertyRef Name="ID диспетчера" />
+          </Key>
+          <Property Name="ID диспетчера" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Фамилия" Type="nchar" MaxLength="10" />
+          <Property Name="Имя" Type="nchar" MaxLength="10" />
+          <Property Name="Отчество" Type="nchar" MaxLength="10" />
+          <Property Name="Паспортные данные" Type="int" />
+        </EntityType>
+        <EntityType Name="Маршрут">
+          <Key>
+            <PropertyRef Name="ID маршрута" />
+          </Key>
+          <Property Name="ID маршрута" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Название маршрута" Type="nchar" MaxLength="10" />
+          <Property Name="ID рейса" Type="int" />
+          <Property Name="ID автобуса" Type="int" />
+          <Property Name="ID деспетчера" Type="int" />
+        </EntityType>
+        <EntityType Name="Пассажир">
+          <Key>
+            <PropertyRef Name="ID пассажира" />
+          </Key>
+          <Property Name="ID пассажира" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar(max)" />
+          <Property Name="Имя" Type="nvarchar(max)" />
+          <Property Name="Отчество" Type="nvarchar(max)" />
+          <Property Name="Паспортные данные" Type="int" />
+          <Property Name="ID билета" Type="int" />
+        </EntityType>
+        <EntityType Name="Пассажировместимость">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Количество мест" Type="int" />
+          <Property Name="Количество билетов" Type="int" />
+          <Property Name="ID билета" Type="int" />
+        </EntityType>
+        <EntityType Name="Расписание рейсов">
+          <Key>
+            <PropertyRef Name="ID рейса" />
+          </Key>
+          <Property Name="ID рейса" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Время отправки" Type="time" Precision="7" />
+          <Property Name="Время прибытия" Type="time" Precision="7" />
+          <Property Name="Статус рейса" Type="nchar" MaxLength="10" />
+          <Property Name="ID водителя" Type="int" />
+          <Property Name="ID маршрута" Type="int" />
+          <Property Name="Название рейса" Type="nvarchar(max)" />
+          <Property Name="ID диспетчера" Type="int" Nullable="false" />
+          <Property Name="ID автобуса" Type="int" />
+          <Property Name="ID билета" Type="int" />
+        </EntityType>
+        <Association Name="FK_Билет_Пассажир">
+          <End Role="Пассажир" Type="Self.Пассажир" Multiplicity="0..1" />
+          <End Role="Билет" Type="Self.Билет" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Пассажир">
+              <PropertyRef Name="ID пассажира" />
+            </Principal>
+            <Dependent Role="Билет">
+              <PropertyRef Name="ID пассажира" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Билет_Расписание рейсов">
+          <End Role="Расписание рейсов" Type="Self.Расписание рейсов" Multiplicity="0..1" />
+          <End Role="Билет" Type="Self.Билет" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Расписание рейсов">
+              <PropertyRef Name="ID рейса" />
+            </Principal>
+            <Dependent Role="Билет">
+              <PropertyRef Name="ID рейса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Пассажировместимость_Билет">
+          <End Role="Билет" Type="Self.Билет" Multiplicity="0..1" />
+          <End Role="Пассажировместимость" Type="Self.Пассажировместимость" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Билет">
+              <PropertyRef Name="ID билета" />
+            </Principal>
+            <Dependent Role="Пассажировместимость">
+              <PropertyRef Name="ID билета" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Расписание рейсов_Автобус">
+          <End Role="Автобус" Type="Self.Автобус" Multiplicity="0..1" />
+          <End Role="Расписание рейсов" Type="Self.Расписание рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Автобус">
+              <PropertyRef Name="ID автобуса" />
+            </Principal>
+            <Dependent Role="Расписание рейсов">
+              <PropertyRef Name="ID автобуса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Расписание рейсов_Водители">
+          <End Role="Водители" Type="Self.Водители" Multiplicity="0..1" />
+          <End Role="Расписание рейсов" Type="Self.Расписание рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Водители">
+              <PropertyRef Name="ID водителя" />
+            </Principal>
+            <Dependent Role="Расписание рейсов">
+              <PropertyRef Name="ID водителя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Расписание рейсов_Диспетчер">
+          <End Role="Диспетчер" Type="Self.Диспетчер" Multiplicity="1" />
+          <End Role="Расписание рейсов" Type="Self.Расписание рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Диспетчер">
+              <PropertyRef Name="ID диспетчера" />
+            </Principal>
+            <Dependent Role="Расписание рейсов">
+              <PropertyRef Name="ID диспетчера" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Расписание рейсов_Маршрут">
+          <End Role="Маршрут" Type="Self.Маршрут" Multiplicity="0..1" />
+          <End Role="Расписание рейсов" Type="Self.Расписание рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Маршрут">
+              <PropertyRef Name="ID маршрута" />
+            </Principal>
+            <Dependent Role="Расписание рейсов">
+              <PropertyRef Name="ID маршрута" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ip50ModelContainer">
+          <EntitySet Name="Автобус" EntityType="Self.Автобус" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Билет" EntityType="Self.Билет" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Водители" EntityType="Self.Водители" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Диспетчер" EntityType="Self.Диспетчер" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Маршрут" EntityType="Self.Маршрут" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Пассажир" EntityType="Self.Пассажир" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Пассажировместимость" EntityType="Self.Пассажировместимость" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Расписание рейсов" EntityType="Self.Расписание рейсов" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Билет_Пассажир" Association="Self.FK_Билет_Пассажир">
+            <End Role="Пассажир" EntitySet="Пассажир" />
+            <End Role="Билет" EntitySet="Билет" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Билет_Расписание рейсов" Association="Self.FK_Билет_Расписание рейсов">
+            <End Role="Расписание рейсов" EntitySet="Расписание рейсов" />
+            <End Role="Билет" EntitySet="Билет" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Пассажировместимость_Билет" Association="Self.FK_Пассажировместимость_Билет">
+            <End Role="Билет" EntitySet="Билет" />
+            <End Role="Пассажировместимость" EntitySet="Пассажировместимость" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Расписание рейсов_Автобус" Association="Self.FK_Расписание рейсов_Автобус">
+            <End Role="Автобус" EntitySet="Автобус" />
+            <End Role="Расписание рейсов" EntitySet="Расписание рейсов" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Расписание рейсов_Водители" Association="Self.FK_Расписание рейсов_Водители">
+            <End Role="Водители" EntitySet="Водители" />
+            <End Role="Расписание рейсов" EntitySet="Расписание рейсов" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Расписание рейсов_Диспетчер" Association="Self.FK_Расписание рейсов_Диспетчер">
+            <End Role="Диспетчер" EntitySet="Диспетчер" />
+            <End Role="Расписание рейсов" EntitySet="Расписание рейсов" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Расписание рейсов_Маршрут" Association="Self.FK_Расписание рейсов_Маршрут">
+            <End Role="Маршрут" EntitySet="Маршрут" />
+            <End Role="Расписание рейсов" EntitySet="Расписание рейсов" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ip50Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Автобус">
+          <Key>
+            <PropertyRef Name="ID_автобуса" />
+          </Key>
+          <Property Name="ID_автобуса" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_водителя" Type="Int32" />
+          <Property Name="Модель_автобуса" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Пассажировместимость" Type="Int32" />
+          <Property Name="Дата_проверки_ТО" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Расписание_рейсов" Relationship="Self.FK_Расписание_рейсов_Автобус" FromRole="Автобус" ToRole="Расписание_рейсов" />
+        </EntityType>
+        <EntityType Name="Билет">
+          <Key>
+            <PropertyRef Name="ID_билета" />
+          </Key>
+          <Property Name="ID_билета" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_пассажира" Type="Int32" />
+          <Property Name="ID_рейса" Type="Int32" />
+          <NavigationProperty Name="Пассажир" Relationship="Self.FK_Билет_Пассажир" FromRole="Билет" ToRole="Пассажир" />
+          <NavigationProperty Name="Расписание_рейсов" Relationship="Self.FK_Билет_Расписание_рейсов" FromRole="Билет" ToRole="Расписание_рейсов" />
+          <NavigationProperty Name="Пассажировместимость" Relationship="Self.FK_Пассажировместимость_Билет" FromRole="Билет" ToRole="Пассажировместимость" />
+        </EntityType>
+        <EntityType Name="Водители">
+          <Key>
+            <PropertyRef Name="ID_водителя" />
+          </Key>
+          <Property Name="ID_водителя" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Фамилия" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Имя" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Отчество" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Телефон" Type="Int32" />
+          <Property Name="Водительское_удостоверение" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Паспортные_данные" Type="Int32" />
+          <Property Name="ID_рейса" Type="Int32" />
+          <Property Name="ID_автобуса" Type="Int32" />
+          <NavigationProperty Name="Расписание_рейсов" Relationship="Self.FK_Расписание_рейсов_Водители" FromRole="Водители" ToRole="Расписание_рейсов" />
+        </EntityType>
+        <EntityType Name="Диспетчер">
+          <Key>
+            <PropertyRef Name="ID_диспетчера" />
+          </Key>
+          <Property Name="ID_диспетчера" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Фамилия" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Имя" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Отчество" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Паспортные_данные" Type="Int32" />
+          <NavigationProperty Name="Расписание_рейсов" Relationship="Self.FK_Расписание_рейсов_Диспетчер" FromRole="Диспетчер" ToRole="Расписание_рейсов" />
+        </EntityType>
+        <EntityType Name="Маршрут">
+          <Key>
+            <PropertyRef Name="ID_маршрута" />
+          </Key>
+          <Property Name="ID_маршрута" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Название_маршрута" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ID_рейса" Type="Int32" />
+          <Property Name="ID_автобуса" Type="Int32" />
+          <Property Name="ID_деспетчера" Type="Int32" />
+          <NavigationProperty Name="Расписание_рейсов" Relationship="Self.FK_Расписание_рейсов_Маршрут" FromRole="Маршрут" ToRole="Расписание_рейсов" />
+        </EntityType>
+        <EntityType Name="Пассажир">
+          <Key>
+            <PropertyRef Name="ID_пассажира" />
+          </Key>
+          <Property Name="ID_пассажира" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Фамилия" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Имя" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Отчество" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Паспортные_данные" Type="Int32" />
+          <Property Name="ID_билета" Type="Int32" />
+          <NavigationProperty Name="Билет" Relationship="Self.FK_Билет_Пассажир" FromRole="Пассажир" ToRole="Билет" />
+        </EntityType>
+        <EntityType Name="Пассажировместимость">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Количество_мест" Type="Int32" />
+          <Property Name="Количество_билетов" Type="Int32" />
+          <Property Name="ID_билета" Type="Int32" />
+          <NavigationProperty Name="Билет" Relationship="Self.FK_Пассажировместимость_Билет" FromRole="Пассажировместимость" ToRole="Билет" />
+        </EntityType>
+        <EntityType Name="Расписание_рейсов">
+          <Key>
+            <PropertyRef Name="ID_рейса" />
+          </Key>
+          <Property Name="ID_рейса" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Время_отправки" Type="Time" Precision="7" />
+          <Property Name="Время_прибытия" Type="Time" Precision="7" />
+          <Property Name="Статус_рейса" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ID_водителя" Type="Int32" />
+          <Property Name="ID_маршрута" Type="Int32" />
+          <Property Name="Название_рейса" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ID_диспетчера" Type="Int32" Nullable="false" />
+          <Property Name="ID_автобуса" Type="Int32" />
+          <Property Name="ID_билета" Type="Int32" />
+          <NavigationProperty Name="Автобус" Relationship="Self.FK_Расписание_рейсов_Автобус" FromRole="Расписание_рейсов" ToRole="Автобус" />
+          <NavigationProperty Name="Билет" Relationship="Self.FK_Билет_Расписание_рейсов" FromRole="Расписание_рейсов" ToRole="Билет" />
+          <NavigationProperty Name="Водители" Relationship="Self.FK_Расписание_рейсов_Водители" FromRole="Расписание_рейсов" ToRole="Водители" />
+          <NavigationProperty Name="Диспетчер" Relationship="Self.FK_Расписание_рейсов_Диспетчер" FromRole="Расписание_рейсов" ToRole="Диспетчер" />
+          <NavigationProperty Name="Маршрут" Relationship="Self.FK_Расписание_рейсов_Маршрут" FromRole="Расписание_рейсов" ToRole="Маршрут" />
+        </EntityType>
+        <Association Name="FK_Расписание_рейсов_Автобус">
+          <End Role="Автобус" Type="Self.Автобус" Multiplicity="0..1" />
+          <End Role="Расписание_рейсов" Type="Self.Расписание_рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Автобус">
+              <PropertyRef Name="ID_автобуса" />
+            </Principal>
+            <Dependent Role="Расписание_рейсов">
+              <PropertyRef Name="ID_автобуса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Билет_Пассажир">
+          <End Role="Пассажир" Type="Self.Пассажир" Multiplicity="0..1" />
+          <End Role="Билет" Type="Self.Билет" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Пассажир">
+              <PropertyRef Name="ID_пассажира" />
+            </Principal>
+            <Dependent Role="Билет">
+              <PropertyRef Name="ID_пассажира" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Билет_Расписание_рейсов">
+          <End Role="Расписание_рейсов" Type="Self.Расписание_рейсов" Multiplicity="0..1" />
+          <End Role="Билет" Type="Self.Билет" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Расписание_рейсов">
+              <PropertyRef Name="ID_рейса" />
+            </Principal>
+            <Dependent Role="Билет">
+              <PropertyRef Name="ID_рейса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Пассажировместимость_Билет">
+          <End Role="Билет" Type="Self.Билет" Multiplicity="0..1" />
+          <End Role="Пассажировместимость" Type="Self.Пассажировместимость" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Билет">
+              <PropertyRef Name="ID_билета" />
+            </Principal>
+            <Dependent Role="Пассажировместимость">
+              <PropertyRef Name="ID_билета" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Расписание_рейсов_Водители">
+          <End Role="Водители" Type="Self.Водители" Multiplicity="0..1" />
+          <End Role="Расписание_рейсов" Type="Self.Расписание_рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Водители">
+              <PropertyRef Name="ID_водителя" />
+            </Principal>
+            <Dependent Role="Расписание_рейсов">
+              <PropertyRef Name="ID_водителя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Расписание_рейсов_Диспетчер">
+          <End Role="Диспетчер" Type="Self.Диспетчер" Multiplicity="1" />
+          <End Role="Расписание_рейсов" Type="Self.Расписание_рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Диспетчер">
+              <PropertyRef Name="ID_диспетчера" />
+            </Principal>
+            <Dependent Role="Расписание_рейсов">
+              <PropertyRef Name="ID_диспетчера" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Расписание_рейсов_Маршрут">
+          <End Role="Маршрут" Type="Self.Маршрут" Multiplicity="0..1" />
+          <End Role="Расписание_рейсов" Type="Self.Расписание_рейсов" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Маршрут">
+              <PropertyRef Name="ID_маршрута" />
+            </Principal>
+            <Dependent Role="Расписание_рейсов">
+              <PropertyRef Name="ID_маршрута" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Автобус" EntityType="Self.Автобус" />
+          <EntitySet Name="Билет" EntityType="Self.Билет" />
+          <EntitySet Name="Водители" EntityType="Self.Водители" />
+          <EntitySet Name="Диспетчер" EntityType="Self.Диспетчер" />
+          <EntitySet Name="Маршрут" EntityType="Self.Маршрут" />
+          <EntitySet Name="Пассажир" EntityType="Self.Пассажир" />
+          <EntitySet Name="Пассажировместимость" EntityType="Self.Пассажировместимость" />
+          <EntitySet Name="Расписание_рейсов" EntityType="Self.Расписание_рейсов" />
+          <AssociationSet Name="FK_Расписание_рейсов_Автобус" Association="Self.FK_Расписание_рейсов_Автобус">
+            <End Role="Автобус" EntitySet="Автобус" />
+            <End Role="Расписание_рейсов" EntitySet="Расписание_рейсов" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Билет_Пассажир" Association="Self.FK_Билет_Пассажир">
+            <End Role="Пассажир" EntitySet="Пассажир" />
+            <End Role="Билет" EntitySet="Билет" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Билет_Расписание_рейсов" Association="Self.FK_Билет_Расписание_рейсов">
+            <End Role="Расписание_рейсов" EntitySet="Расписание_рейсов" />
+            <End Role="Билет" EntitySet="Билет" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Пассажировместимость_Билет" Association="Self.FK_Пассажировместимость_Билет">
+            <End Role="Билет" EntitySet="Билет" />
+            <End Role="Пассажировместимость" EntitySet="Пассажировместимость" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Расписание_рейсов_Водители" Association="Self.FK_Расписание_рейсов_Водители">
+            <End Role="Водители" EntitySet="Водители" />
+            <End Role="Расписание_рейсов" EntitySet="Расписание_рейсов" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Расписание_рейсов_Диспетчер" Association="Self.FK_Расписание_рейсов_Диспетчер">
+            <End Role="Диспетчер" EntitySet="Диспетчер" />
+            <End Role="Расписание_рейсов" EntitySet="Расписание_рейсов" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Расписание_рейсов_Маршрут" Association="Self.FK_Расписание_рейсов_Маршрут">
+            <End Role="Маршрут" EntitySet="Маршрут" />
+            <End Role="Расписание_рейсов" EntitySet="Расписание_рейсов" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ip50ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Автобус">
+            <EntityTypeMapping TypeName="ip50Model.Автобус">
+              <MappingFragment StoreEntitySet="Автобус">
+                <ScalarProperty Name="ID_автобуса" ColumnName="ID автобуса" />
+                <ScalarProperty Name="ID_водителя" ColumnName="ID водителя" />
+                <ScalarProperty Name="Модель_автобуса" ColumnName="Модель автобуса" />
+                <ScalarProperty Name="Пассажировместимость" ColumnName="Пассажировместимость" />
+                <ScalarProperty Name="Дата_проверки_ТО" ColumnName="Дата проверки ТО" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Билет">
+            <EntityTypeMapping TypeName="ip50Model.Билет">
+              <MappingFragment StoreEntitySet="Билет">
+                <ScalarProperty Name="ID_билета" ColumnName="ID билета" />
+                <ScalarProperty Name="ID_пассажира" ColumnName="ID пассажира" />
+                <ScalarProperty Name="ID_рейса" ColumnName="ID рейса" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Водители">
+            <EntityTypeMapping TypeName="ip50Model.Водители">
+              <MappingFragment StoreEntitySet="Водители">
+                <ScalarProperty Name="ID_водителя" ColumnName="ID водителя" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+                <ScalarProperty Name="Водительское_удостоверение" ColumnName="Водительское удостоверение" />
+                <ScalarProperty Name="Паспортные_данные" ColumnName="Паспортные данные" />
+                <ScalarProperty Name="ID_рейса" ColumnName="ID рейса" />
+                <ScalarProperty Name="ID_автобуса" ColumnName="ID автобуса" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Диспетчер">
+            <EntityTypeMapping TypeName="ip50Model.Диспетчер">
+              <MappingFragment StoreEntitySet="Диспетчер">
+                <ScalarProperty Name="ID_диспетчера" ColumnName="ID диспетчера" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Паспортные_данные" ColumnName="Паспортные данные" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Маршрут">
+            <EntityTypeMapping TypeName="ip50Model.Маршрут">
+              <MappingFragment StoreEntitySet="Маршрут">
+                <ScalarProperty Name="ID_маршрута" ColumnName="ID маршрута" />
+                <ScalarProperty Name="Название_маршрута" ColumnName="Название маршрута" />
+                <ScalarProperty Name="ID_рейса" ColumnName="ID рейса" />
+                <ScalarProperty Name="ID_автобуса" ColumnName="ID автобуса" />
+                <ScalarProperty Name="ID_деспетчера" ColumnName="ID деспетчера" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Пассажир">
+            <EntityTypeMapping TypeName="ip50Model.Пассажир">
+              <MappingFragment StoreEntitySet="Пассажир">
+                <ScalarProperty Name="ID_пассажира" ColumnName="ID пассажира" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Паспортные_данные" ColumnName="Паспортные данные" />
+                <ScalarProperty Name="ID_билета" ColumnName="ID билета" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Пассажировместимость">
+            <EntityTypeMapping TypeName="ip50Model.Пассажировместимость">
+              <MappingFragment StoreEntitySet="Пассажировместимость">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Количество_мест" ColumnName="Количество мест" />
+                <ScalarProperty Name="Количество_билетов" ColumnName="Количество билетов" />
+                <ScalarProperty Name="ID_билета" ColumnName="ID билета" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Расписание_рейсов">
+            <EntityTypeMapping TypeName="ip50Model.Расписание_рейсов">
+              <MappingFragment StoreEntitySet="Расписание рейсов">
+                <ScalarProperty Name="ID_рейса" ColumnName="ID рейса" />
+                <ScalarProperty Name="Время_отправки" ColumnName="Время отправки" />
+                <ScalarProperty Name="Время_прибытия" ColumnName="Время прибытия" />
+                <ScalarProperty Name="Статус_рейса" ColumnName="Статус рейса" />
+                <ScalarProperty Name="ID_водителя" ColumnName="ID водителя" />
+                <ScalarProperty Name="ID_маршрута" ColumnName="ID маршрута" />
+                <ScalarProperty Name="Название_рейса" ColumnName="Название рейса" />
+                <ScalarProperty Name="ID_диспетчера" ColumnName="ID диспетчера" />
+                <ScalarProperty Name="ID_автобуса" ColumnName="ID автобуса" />
+                <ScalarProperty Name="ID_билета" ColumnName="ID билета" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
